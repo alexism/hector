@@ -50,7 +50,7 @@ public class CassandraStore {
   
   public CassandraStore(CassandraStoreConfiguration conf) {
     this.conf = conf;
-    this.cluster = HFactory.getCluster(conf.getValue(EntityManagerConfigurator.CLUSTER_NAME_PROP)
+    this.cluster = HFactory.getCluster(conf.getValue(EntityManagerConfigurator.CLUSTER_ID_PROP)
         .getOriginalValue());
     // TODO needs passthrough of other configuration
     mappingUtils = new MappingUtils();

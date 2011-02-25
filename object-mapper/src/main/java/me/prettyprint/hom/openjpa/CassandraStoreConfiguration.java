@@ -14,7 +14,7 @@ public class CassandraStoreConfiguration extends OpenJPAConfigurationImpl {
     lockManagerPlugin.setString("version");
     addString("me.prettyprint.hom.classpathPrefix");
     addString("me.prettyprint.hom.keyspace");
-    addString("me.prettyprint.hom.clusterName");
+    addString("me.prettyprint.hom.clusterId");
     addString("me.prettyprint.hom.hostList");
 
     ProductDerivations.beforeConfigurationLoad(this);

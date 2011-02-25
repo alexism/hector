@@ -13,12 +13,12 @@ import org.apache.cassandra.thrift.TokenRange;
 
 public class ThriftCluster extends AbstractCluster implements Cluster {
 
-  public ThriftCluster(String clusterName, CassandraHostConfigurator cassandraHostConfigurator) {
-    super(clusterName, cassandraHostConfigurator);
+  public ThriftCluster(String clusterId, CassandraHostConfigurator cassandraHostConfigurator) {
+    super(clusterId, cassandraHostConfigurator);
   }
 
-  public ThriftCluster(String clusterName, CassandraHostConfigurator cassandraHostConfigurator, Map<String, String> credentials) {
-    super(clusterName, cassandraHostConfigurator, credentials);
+  public ThriftCluster(String clusterId, CassandraHostConfigurator cassandraHostConfigurator, Map<String, String> credentials) {
+    super(clusterId, cassandraHostConfigurator, credentials);
   }
 
   public List<TokenRange> describeRing(final String keyspace) throws HectorException {

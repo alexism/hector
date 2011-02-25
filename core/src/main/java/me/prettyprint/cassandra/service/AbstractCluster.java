@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import me.prettyprint.cassandra.connection.HConnectionManager;
-import me.prettyprint.cassandra.service.clock.MicrosecondsSyncClockResolution;
 import me.prettyprint.hector.api.ClockResolution;
 import me.prettyprint.hector.api.Cluster;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
@@ -44,7 +43,7 @@ public abstract class AbstractCluster implements Cluster {
   private final Logger log = LoggerFactory.getLogger(AbstractCluster.class);
 
   protected final HConnectionManager connectionManager;
-  private final String name;
+  private final String id;
   private final CassandraHostConfigurator configurator;
   private final ClockResolution clockResolution;
   private final FailoverPolicy failoverPolicy;
@@ -54,13 +53,13 @@ public abstract class AbstractCluster implements Cluster {
   protected final ExceptionsTranslator xtrans;
   private final Map<String, String> credentials;
 
-  public AbstractCluster(String clusterName, CassandraHostConfigurator cassandraHostConfigurator) {
-    this(clusterName, cassandraHostConfigurator, EMPTY_CREDENTIALS);
+  public AbstractCluster(String clusterId, CassandraHostConfigurator cassandraHostConfigurator) {
+    this(clusterId, cassandraHostConfigurator, EMPTY_CREDENTIALS);
   }
 
-  public AbstractCluster(String clusterName, CassandraHostConfigurator cassandraHostConfigurator, Map<String, String> credentials) {
-    connectionManager = new HConnectionManager(clusterName, cassandraHostConfigurator);
-    name = clusterName;
+  public AbstractCluster(String clusterId, CassandraHostConfigurator cassandraHostConfigurator, Map<String, String> credentials) {
+    connectionManager = new HConnectionManager(clusterId, cassandraHostConfigurator);
+    id = clusterId;
     configurator = cassandraHostConfigurator;
     failoverPolicy = FailoverPolicy.ON_FAIL_TRY_ALL_AVAILABLE;
     cassandraClientMonitor = JmxMonitor.getInstance().getCassandraMonitor(connectionManager);
@@ -102,18 +101,19 @@ public abstract class AbstractCluster implements Cluster {
 
 
   /* (non-Javadoc)
-   * @see me.prettyprint.cassandra.service.Cluster#getName()
+   * @see me.prettyprint.cassandra.service.Cluster#getId()
    */
   @Override
-  public String getName() {
-    return name;
+  public String getId() {
+    return id;
   }
 
+   @Override
+   public String getName() {
+      return getId();
+   }
 
-
-
-
-  /* (non-Javadoc)
+   /* (non-Javadoc)
    * @see me.prettyprint.cassandra.service.Cluster#describeKeyspaces()
    */
   @Override

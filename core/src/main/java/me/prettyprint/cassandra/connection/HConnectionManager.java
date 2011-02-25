@@ -42,7 +42,7 @@ public class HConnectionManager {
   private final NonBlockingHashMap<CassandraHost,ConcurrentHClientPool> hostPools;
   private final NonBlockingHashMap<CassandraHost,ConcurrentHClientPool> suspendedHostPools;  
   private final Collection<ConcurrentHClientPool> hostPoolValues;
-  private final String clusterName;
+  private final String clusterId;
   private CassandraHostRetryService cassandraHostRetryService;
   private NodeAutoDiscoverService nodeAutoDiscoverService;
   private LoadBalancingPolicy loadBalancingPolicy;
@@ -55,12 +55,12 @@ public class HConnectionManager {
   private CassandraClientMonitor monitor;
 
 
-  public HConnectionManager(String clusterName, CassandraHostConfigurator cassandraHostConfigurator) {
+  public HConnectionManager(String clusterId, CassandraHostConfigurator cassandraHostConfigurator) {
     loadBalancingPolicy = cassandraHostConfigurator.getLoadBalancingPolicy();
     clock = cassandraHostConfigurator.getClockResolution();
     hostPools = new NonBlockingHashMap<CassandraHost, ConcurrentHClientPool>();
     suspendedHostPools = new NonBlockingHashMap<CassandraHost, ConcurrentHClientPool>();
-    this.clusterName = clusterName;
+    this.clusterId = clusterId;
     if ( cassandraHostConfigurator.getRetryDownedHosts() ) {
       cassandraHostRetryService = new CassandraHostRetryService(this, cassandraHostConfigurator);
     }    
@@ -352,9 +352,17 @@ public class HConnectionManager {
   public long createClock() {
     return this.clock.createClock();
   }
-  
+
+   /**
+    *
+    * @deprecated use {@link #getClusterId()}
+    */
   public String getClusterName() {
-    return clusterName;
+     return getClusterId();
+  }
+
+  public String getClusterId() {
+    return clusterId;
   }
 
   public void shutdown() {

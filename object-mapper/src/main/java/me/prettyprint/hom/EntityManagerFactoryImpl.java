@@ -42,7 +42,7 @@ public class EntityManagerFactoryImpl implements EntityManagerFactory {
   
   public EntityManagerFactoryImpl(EntityManagerConfigurator entityManagerConfigurator) {
     this.entityManagerConfigurator = entityManagerConfigurator;
-    this.cluster = HFactory.getOrCreateCluster(entityManagerConfigurator.getClusterName(), 
+    this.cluster = HFactory.getOrCreateCluster(entityManagerConfigurator.getClusterId(),
         entityManagerConfigurator.getCassandraHostConfigurator());
 
   }

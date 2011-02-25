@@ -34,14 +34,14 @@ public class HConnectionManagerTest extends BaseEmbededServerSetupTest {
   
   @Test(expected=IllegalArgumentException.class)
   public void testNullHostList() {
-    HConnectionManager hcm = new HConnectionManager(clusterName, new CassandraHostConfigurator());
+    HConnectionManager hcm = new HConnectionManager(clusterId, new CassandraHostConfigurator());
   }
   
   @Test
   public void testMarkHostDownWithNoRetry() {
     cassandraHostConfigurator = new CassandraHostConfigurator("127.0.0.1:9170");
     cassandraHostConfigurator.setRetryDownedHosts(false);
-    connectionManager = new HConnectionManager(clusterName, cassandraHostConfigurator);
+    connectionManager = new HConnectionManager(clusterId, cassandraHostConfigurator);
     CassandraHost cassandraHost = new CassandraHost("127.0.0.1", 9170);    
     HThriftClient client = connectionManager.borrowClient();
     connectionManager.markHostAsDown(client);

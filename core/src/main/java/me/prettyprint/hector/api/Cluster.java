@@ -30,9 +30,14 @@ public interface Cluster {
    * This name is used to identify the cluster.
    * @return
    */
+  String getId();
+
+  /**
+   * @deprecated use {@link #getId()}
+   */
   String getName();
 
-   /**
+  /**
     *
     * @deprecated use {@link #describeClusterName()}
     */

@@ -25,7 +25,7 @@ public abstract class BaseEmbededServerSetupTest {
 
   protected HConnectionManager connectionManager;
   protected CassandraHostConfigurator cassandraHostConfigurator;
-  protected String clusterName = "TestCluster";
+  protected String clusterId = "TestCluster";
 
   /**
    * Set embedded cassandra up and spawn it in a new thread.
@@ -50,6 +50,6 @@ public abstract class BaseEmbededServerSetupTest {
 
   protected void setupClient() {
     cassandraHostConfigurator = new CassandraHostConfigurator("127.0.0.1:9170");
-    connectionManager = new HConnectionManager(clusterName,cassandraHostConfigurator);
+    connectionManager = new HConnectionManager(clusterId,cassandraHostConfigurator);
   }
 }

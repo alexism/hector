@@ -182,7 +182,7 @@ public class CassandraStoreManager extends AbstractStoreManager {
     OpenJPAConfiguration conf = ctx.getConfiguration();
     // TODO
     // encapsulate into CassandraStore or similar (should take CassandraStoreConfig as an argg
-    //cluster = HFactory.getCluster(conf.getValue("me.prettyprint.hom.clusterName").getOriginalValue());
+    //cluster = HFactory.getCluster(conf.getValue("me.prettyprint.hom.clusterId").getOriginalValue());
     //keyspace = HFactory.createKeyspace(conf.getValue("me.prettyprint.hom.keyspace").getOriginalValue(), cluster);    
     
     cassandraStore = new CassandraStore((CassandraStoreConfiguration)conf);

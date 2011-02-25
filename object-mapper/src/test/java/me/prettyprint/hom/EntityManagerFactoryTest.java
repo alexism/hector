@@ -39,7 +39,7 @@ public class EntityManagerFactoryTest extends CassandraTestBase {
   public void initFactory() {
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put(EntityManagerConfigurator.CLASSPATH_PREFIX_PROP, "me.prettyprint.hom.beans");
-    properties.put(EntityManagerConfigurator.CLUSTER_NAME_PROP, "TestPool");
+    properties.put(EntityManagerConfigurator.CLUSTER_ID_PROP, "TestPool");
     properties.put(EntityManagerConfigurator.KEYSPACE_PROP, "TestKeyspace");
     EntityManagerConfigurator emc = new EntityManagerConfigurator(properties);
     entityManagerFactory = new EntityManagerFactoryImpl(properties);

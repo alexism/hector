@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import me.prettyprint.cassandra.service.CassandraHostConfigurator;
+import org.slf4j.LoggerFactory;
 
 /**
  * Config wrapper around the properties map required in the JPA
@@ -17,12 +18,16 @@ public class EntityManagerConfigurator {
 
   public static final String PROP_PREFIX = "me.prettyprint.hom.";
   public static final String CLASSPATH_PREFIX_PROP = PROP_PREFIX + "classpathPrefix";
+   /**
+    * @deprecated use {@link #CLUSTER_ID_PROP}
+    */
   public static final String CLUSTER_NAME_PROP = PROP_PREFIX + "clusterName";
+  public static final String CLUSTER_ID_PROP = PROP_PREFIX + "clusterId";
   public static final String KEYSPACE_PROP = PROP_PREFIX + "keyspace";
   public static final String HOST_LIST_PROP = PROP_PREFIX + "hostList";
   
   private final String classpathPrefix;
-  private final String clusterName;
+  private final String clusterId;
   private final String keyspace;
   private CassandraHostConfigurator cassandraHostConfigurator;
   
@@ -46,7 +51,13 @@ public class EntityManagerConfigurator {
   public EntityManagerConfigurator(Map<String, Object> properties, 
       CassandraHostConfigurator cassandraHostConfigurator) {
     classpathPrefix = getPropertyGently(properties, CLASSPATH_PREFIX_PROP,true);
-    clusterName = getPropertyGently(properties, CLUSTER_NAME_PROP,true);
+    String id = getPropertyGently(properties, CLUSTER_NAME_PROP,false);
+    if(id!=null){
+      LoggerFactory.getLogger(getClass()).warn(CLUSTER_NAME_PROP + " is deprecated. Use " + CLUSTER_ID_PROP);
+    }else {
+      id = getPropertyGently(properties, CLUSTER_ID_PROP,true);
+    }
+    clusterId = id;
     keyspace = getPropertyGently(properties, KEYSPACE_PROP,true);
     if ( cassandraHostConfigurator == null ) {
       String hostList = getPropertyGently(properties, HOST_LIST_PROP, false);
@@ -73,8 +84,16 @@ public class EntityManagerConfigurator {
     return classpathPrefix;
   }
 
+   /**
+    *
+    * @deprecated use {@link #getClusterId()}
+    */
   public String getClusterName() {
-    return clusterName;
+     return getClusterId();
+  }
+   
+  public String getClusterId() {
+    return clusterId;
   }
 
   public String getKeyspace() {
@@ -89,12 +108,10 @@ public class EntityManagerConfigurator {
   public String toString() {
     return new StringBuilder(512).append(CLASSPATH_PREFIX_PROP).append(":")
     .append(classpathPrefix).append(", ")
-    .append(CLUSTER_NAME_PROP).append(":")
-    .append(clusterName).append(", ")
+    .append(CLUSTER_ID_PROP).append(":")
+    .append(clusterId).append(", ")
     .append(KEYSPACE_PROP).append(":")
     .append(keyspace).toString();
   }
   
-  
-    
 }

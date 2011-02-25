@@ -51,7 +51,7 @@ public class SpringContainerInitalizationTest extends CassandraTestBase {
   
   private Properties buildProps() {
     Properties props = new Properties();
-    props.put(EntityManagerConfigurator.CLUSTER_NAME_PROP, "TestPool");
+    props.put(EntityManagerConfigurator.CLUSTER_ID_PROP, "TestPool");
     props.put(EntityManagerConfigurator.CLASSPATH_PREFIX_PROP, "me.prettyprint.hom.beans");
     props.put(EntityManagerConfigurator.HOST_LIST_PROP, "localhost:9161");
     props.put(EntityManagerConfigurator.KEYSPACE_PROP, "TestKeyspace");

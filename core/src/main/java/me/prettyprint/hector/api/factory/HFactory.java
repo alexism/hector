@@ -77,9 +77,9 @@ public final class HFactory {
 
   private static final ConsistencyLevelPolicy DEFAULT_CONSISTENCY_LEVEL_POLICY = new QuorumAllConsistencyLevelPolicy();
 
-  public static Cluster getCluster(String clusterName) {
+  public static Cluster getCluster(String clusterId) {
     synchronized (clusters) {
-      return clusters.get(clusterName);
+      return clusters.get(clusterId);
     }
   }
 
@@ -91,22 +91,22 @@ public final class HFactory {
    * 
    * Example usage for a default installation of Cassandra.
    * 
-   * String clusterName = "Test Cluster"; String host = "localhost:9160";
-   * Cluster cluster = HFactory.getOrCreateCluster(clusterName, host);
+   * String clusterId = "Test Cluster"; String host = "localhost:9160";
+   * Cluster cluster = HFactory.getOrCreateCluster(clusterId, host);
    * 
    * Note the host should be the hostname and port number. It is preferable to
    * use the hostname instead of the IP address.
    * 
-   * @param clusterName
-   *          The cluster name. This is an identifying string for the cluster,
+   * @param clusterId
+   *          The cluster id. This is an identifying string for the cluster,
    *          e.g. "production" or "test" etc. Clusters will be created on
-   *          demand per each unique clusterName key.
+   *          demand per each unique clusterId..
    * @param hostIp
    *          host:ip format string
    * @return
    */
-  public static Cluster getOrCreateCluster(String clusterName, String hostIp) {
-    return getOrCreateCluster(clusterName,
+  public static Cluster getOrCreateCluster(String clusterId, String hostIp) {
+    return getOrCreateCluster(clusterId,
         new CassandraHostConfigurator(hostIp));
   }
 
@@ -118,23 +118,23 @@ public final class HFactory {
    * 
    * Example usage for a default installation of Cassandra.
    * 
-   * String clusterName = "Test Cluster"; String host = "localhost:9160";
-   * Cluster cluster = HFactory.getOrCreateCluster(clusterName, new
+   * String clusterId = "Test Cluster"; String host = "localhost:9160";
+   * Cluster cluster = HFactory.getOrCreateCluster(clusterId, new
    * CassandraHostConfigurator(host));
    * 
-   * @param clusterName
-   *          The cluster name. This is an identifying string for the cluster,
+   * @param clusterId
+   *          The cluster id. This is an identifying string for the cluster,
    *          e.g. "production" or "test" etc. Clusters will be created on
-   *          demand per each unique clusterName key.
+   *          demand per each unique clusterId.
    * @param cassandraHostConfigurator
    */
-  public static Cluster getOrCreateCluster(String clusterName,
+  public static Cluster getOrCreateCluster(String clusterId,
       CassandraHostConfigurator cassandraHostConfigurator) {
     synchronized (clusters) {
-      Cluster c = clusters.get(clusterName);
+      Cluster c = clusters.get(clusterId);
       if (c == null) {
-        c = createCluster(clusterName, cassandraHostConfigurator);
-        clusters.put(clusterName, c);
+        c = createCluster(clusterId, cassandraHostConfigurator);
+        clusters.put(clusterId, c);
       }
       return c;
     }
@@ -144,18 +144,18 @@ public final class HFactory {
    * Method looks in the cache for the cluster by name. If none exists, a new
    * ThriftCluster instance is created.
    * 
-   * @param clusterName
-   *          The cluster name. This is an identifying string for the cluster,
+   * @param clusterId
+   *          The cluster id. This is an identifying string for the cluster,
    *          e.g. "production" or "test" etc. Clusters will be created on
-   *          demand per each unique clusterName key.
+   *          demand per each unique clusterId.
    * @param cassandraHostConfigurator
    * 
    */
-  public static Cluster createCluster(String clusterName,
+  public static Cluster createCluster(String clusterId,
       CassandraHostConfigurator cassandraHostConfigurator) {
     synchronized (clusters) {
-      return clusters.get(clusterName) == null ? new ThriftCluster(clusterName,
-          cassandraHostConfigurator) : clusters.get(clusterName);
+      return clusters.get(clusterId) == null ? new ThriftCluster(clusterId,
+          cassandraHostConfigurator) : clusters.get(clusterId);
     }
   }
 
@@ -163,19 +163,19 @@ public final class HFactory {
    * Method looks in the cache for the cluster by name. If none exists, a new
    * ThriftCluster instance is created.
    * 
-   * @param clusterName
-   *          The cluster name. This is an identifying string for the cluster,
+   * @param clusterId
+   *          The cluster id. This is an identifying string for the cluster,
    *          e.g. "production" or "test" etc. Clusters will be created on
-   *          demand per each unique clusterName key.
+   *          demand per each unique clusterId.
    * @param cassandraHostConfigurator
    * @param credentials
    */
-  public static Cluster createCluster(String clusterName,
+  public static Cluster createCluster(String clusterId,
       CassandraHostConfigurator cassandraHostConfigurator,
       Map<String, String> credentials) {
     synchronized (clusters) {
-      return clusters.get(clusterName) == null ? new ThriftCluster(clusterName,
-          cassandraHostConfigurator, credentials) : clusters.get(clusterName);
+      return clusters.get(clusterId) == null ? new ThriftCluster(clusterId,
+          cassandraHostConfigurator, credentials) : clusters.get(clusterId);
     }
   }
   
@@ -186,10 +186,10 @@ public final class HFactory {
    */
   public static void shutdownCluster(Cluster cluster) {
     synchronized (clusters) {
-      String clusterName = cluster.getName();
-      if (clusters.get(clusterName) != null ) {
+      String clusterId = cluster.getId();
+      if (clusters.get(clusterId) != null ) {
         cluster.getConnectionManager().shutdown();
-        clusters.remove(clusterName);
+        clusters.remove(clusterId);
       }
     }
   }
@@ -199,9 +199,9 @@ public final class HFactory {
    * 
    * Example usage.
    *
-   * String clusterName = "Test Cluster";
+   * String clusterId = "Test Cluster";
    * String host = "localhost:9160";
-   * Cluster cluster = HFactory.getOrCreateCluster(clusterName, host);
+   * Cluster cluster = HFactory.getOrCreateCluster(clusterId, host);
    * String keyspaceName = "testKeyspace";
    * Keyspace myKeyspace = HFactory.createKeyspace(keyspaceName, cluster);
    * 
